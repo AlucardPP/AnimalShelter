@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BottomPaneController">
+   <children>
+      <TableView fx:id="tableView" prefWidth="750.0">
+        <columns>
+          <TableColumn fx:id="collarIdColumn" prefWidth="75.0" text="Collar ID" />
+          <TableColumn fx:id="petNameColumn" prefWidth="92.0" text="Pet Name" />
+            <TableColumn fx:id="typeOfAnimalColumn" prefWidth="82.0" text="Type" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="424.0" text="Description" />
+            <TableColumn fx:id="imageColumn" minWidth="0.0" prefWidth="76.0" text="Image" />
+        </columns>
+      </TableView>
+      <Button fx:id="viewButton" layoutY="400.0" mnemonicParsing="false" text="View" />
+      <Button fx:id="deleteButton" layoutX="687.0" layoutY="400.0" mnemonicParsing="false" text="Delete" />
+   </children>
+</AnchorPane>
