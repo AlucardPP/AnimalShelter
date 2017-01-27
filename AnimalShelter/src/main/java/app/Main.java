@@ -11,6 +11,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		// po ki chuj tu castujesz ?
 		Parent parent=(Parent)FXMLLoader.load(getClass().getResource("/view/MainPane.fxml"));
 		Scene scene=new Scene(parent);
 		scene.getStylesheets().add(getClass().getResource("/css/text-field-red-border.css").toExternalForm());

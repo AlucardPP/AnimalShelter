@@ -81,12 +81,15 @@ public class LeftPaneController implements Initializable {
 		return petPicture;
 	}
 
+	//rozbij na mniejsze
 	public void initialize(URL location, ResourceBundle resources) {
 		collarIdField.setPromptText("Collar ID");
 		petNameField.setPromptText("Name of Pet");
 		typeAnimalField.setPromptText("Type of Animal");
 		descriptionArea.setPromptText("Put some description of animal who you want to register");
 
+
+		//ładniej da się zapisać
 		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent event) {
@@ -94,7 +97,13 @@ public class LeftPaneController implements Initializable {
 				event.consume();
 			}
 		});
+		//np:
+		//cancelButton.setOnAction(event -> {
+		//	clearFields(collarIdField,petNameField,typeAnimalField,descriptionArea,petPicture);
+		//	event.consume();
+		//});
 
+		// to samo ;)
 		addImageButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -123,6 +132,7 @@ public class LeftPaneController implements Initializable {
 		imageView.setImage(null);
 	}
 
+	// to jest baaardzo złe - przemyśl to jeszcze raz ;) Nie dość że nie będzie działać poprawnie to jeszcze zapis woła o pomstę do nieba
 	public boolean checkIfEmpty(TextField id,TextField pName,TextField tAnimal,TextArea desc) {
 		if (id.getText().isEmpty()) {
 			id.getStyleClass().add("error");
@@ -158,6 +168,7 @@ public class LeftPaneController implements Initializable {
              Image image = SwingFXUtils.toFXImage(bufferedImage, null);
              petPicture.setImage(image);
          } catch (IOException ex) {
+         	//Loggery robimy jako pola statyczne dla klasy!
              Logger.getLogger(LeftPaneController.class.getName()).log(Level.SEVERE, null, ex);
          }
 	}

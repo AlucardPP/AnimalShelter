@@ -35,6 +35,9 @@ public class MainPaneController implements Initializable {
 	@FXML
 	private BottomPaneController bottomPaneController;
 
+
+	//metoda ma 30 lini kodu a uncle bob twierdzi że max 7 mieć powinna
+	// rozbij po typie inicjacji na 3 mniejsze
 	public void initialize(URL location, ResourceBundle resources) {
 		TextField collarId = leftPaneController.getCollarIdField();
 		TextField petName = leftPaneController.getPetNameField();
@@ -44,6 +47,8 @@ public class MainPaneController implements Initializable {
 		ImageView animalImage = leftPaneController.getPetPicture();
 		TableView<Animals> tableOfAnimals = bottomPaneController.getTableView();
 		TableColumn<Animals, String> collarIdColumn = bottomPaneController.getCollarIdColumn();
+		//od jakiegoś czasu pisze się new PropertyValueFactory("collarId")
+		//nie jest to błąd ale intellij poprawia to już nawet, bo taka deklaracja nie ma sensu
 		collarIdColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("collarId"));
 		TableColumn<Animals, String> petNameColumn = bottomPaneController.getPetNameColumn();
 		petNameColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("name"));
@@ -53,6 +58,7 @@ public class MainPaneController implements Initializable {
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("description"));
 		TableColumn<Animals, ImageView> imageColumn = bottomPaneController.getImageColumn();
 		imageColumn.setCellValueFactory(new PropertyValueFactory<Animals, ImageView>("image"));
+		//coś nie commitnięte
 		Button viewSelectedRow = bottomPaneController.getViewButton();
 
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -62,7 +68,7 @@ public class MainPaneController implements Initializable {
 				if (leftPaneController.checkIfEmpty(collarId, petName, typeOfAnimal, description) == false) {
 					// add some window with information about error
 				} else {
-
+						//a o formatowaniu kodu kolega słyszał ?
 					 addToTable(collarId, petName, typeOfAnimal, description, animalImage, tableOfAnimals);
 					 leftPaneController.clearFields(collarId, petName,
 					  typeOfAnimal, description, animalImage);
@@ -92,9 +98,13 @@ public class MainPaneController implements Initializable {
 
 	}
 
+	//dobra porada dnia - czasem jak robisz 3 proste myśli w ramach jednej metody ( clean code karze rozbijać to na 3 metody ale nie bądźmy nadgorliwi) to te myśli rozbija się enterami
+	//czyta się taki kod łatwiej wtedy
 	public void addToTable(TextField id, TextField pName, TextField tAnimal, TextArea desc, ImageView imageView,
 			TableView<Animals> table ) {
 		String colId = id.getText();
+		// co oznacza petN? to samo co to pName - nazewnictwo, nazewnictwo, nazewnictwo
+		// za 3 tyg nie będziesz tego pamiętał co do czego służy
 		String petN = pName.getText();
 		String type = tAnimal.getText();
 		String dsc = desc.getText();
