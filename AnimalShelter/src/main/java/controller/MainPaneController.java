@@ -1,6 +1,8 @@
 package controller;
 
+
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -10,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -50,6 +53,7 @@ public class MainPaneController implements Initializable {
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("description"));
 		TableColumn<Animals, ImageView> imageColumn = bottomPaneController.getImageColumn();
 		imageColumn.setCellValueFactory(new PropertyValueFactory<Animals, ImageView>("image"));
+		Button viewSelectedRow = bottomPaneController.getViewButton();
 
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -65,10 +69,25 @@ public class MainPaneController implements Initializable {
 
 
 				}
+				event.consume();
 
 
 
 			}
+		});
+
+		viewSelectedRow.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				leftPaneController.clearFields(collarId, petName,
+						  typeOfAnimal, description, animalImage);
+				viewTableRow(tableOfAnimals, collarId, petName, typeOfAnimal, description, animalImage);
+
+
+			}
+
+
 		});
 
 	}
@@ -87,6 +106,17 @@ public class MainPaneController implements Initializable {
 		Animals animal = new Animals(colId, petN, type, dsc, image);
 		data.add(animal);
 		table.setItems(data);
+
+	}
+	private void viewTableRow(TableView table, TextField id,TextField name, TextField type,TextArea desc, ImageView image){
+		ObservableList<Animals> singleRow=table.getSelectionModel().getSelectedItems();
+		Animals animal=singleRow.get(0);
+		id.setText(animal.getCollarId());
+		name.setText(animal.getName());
+		type.setText(animal.getType());
+		desc.setText(animal.getDescription());
+		Image img=animal.getImage().getImage();
+		image.setImage(img);
 
 	}
 
