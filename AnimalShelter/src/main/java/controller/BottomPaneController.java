@@ -16,7 +16,6 @@ public class BottomPaneController implements Initializable {
 	@FXML
 	private TableColumn<Animals, String> petNameColumn;
 
-	//niewykorzystane pole ?
 	@FXML
 	private Button deleteButton;
 
@@ -32,12 +31,19 @@ public class BottomPaneController implements Initializable {
 	@FXML
 	private TableColumn<Animals, String> collarIdColumn;
 
-	//niewykorzystane pole ?
 	@FXML
 	private Button viewButton;
 
 	@FXML
 	private TableColumn<Animals, String> descriptionColumn;
+
+	public Button getDeleteButton() {
+		return deleteButton;
+	}
+
+	public Button getViewButton() {
+		return viewButton;
+	}
 
 	public TableView<Animals> getTableView() {
 		return tableView;
