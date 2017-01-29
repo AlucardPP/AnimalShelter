@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -37,10 +38,6 @@ public class BottomPaneController implements Initializable {
 	@FXML
 	private TableColumn<Animals, String> descriptionColumn;
 
-	public Button getDeleteButton() {
-		return deleteButton;
-	}
-
 	public Button getViewButton() {
 		return viewButton;
 	}
@@ -70,8 +67,26 @@ public class BottomPaneController implements Initializable {
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+		deleteSingleRow();
 
+	}
+
+	private void deleteSingleRow() {
+		deleteButton.setOnAction(event -> {
+			ObservableList<Animals> singleRow = tableView.getSelectionModel().getSelectedItems();
+			Animals animal = singleRow.get(0);
+			tableView.getItems().remove(animal);
+		});
+	}
+
+	public boolean checkSizeOfTable(int maxSize) {
+		int size = tableView.getItems().size();
+		if (size < maxSize) {
+			return true;
+		}
+
+		else
+			return false;
 	}
 
 }

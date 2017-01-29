@@ -11,8 +11,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,7 +22,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 
 public class LeftPaneController implements Initializable {
 
@@ -81,30 +79,36 @@ public class LeftPaneController implements Initializable {
 		return petPicture;
 	}
 
-	//rozbij na mniejsze
 	public void initialize(URL location, ResourceBundle resources) {
 		initializeFieldsDescription();
+		cancelButtonAction();
+		addImageButtonAction();
 
-		cancelButton.setOnAction(event -> {
-			clearFields(collarIdField,petNameField,typeAnimalField,descriptionArea,petPicture);
-			event.consume();
-		});
+	}
 
-
+	private void addImageButtonAction() {
 		addImageButton.setOnAction(event -> {
 			chooseImage();
 			event.consume();
 		});
-
 	}
-	private void initializeFieldsDescription(){
+
+	private void cancelButtonAction() {
+		cancelButton.setOnAction(event -> {
+			clearFields(collarIdField, petNameField, typeAnimalField, descriptionArea, petPicture);
+			event.consume();
+		});
+	}
+
+	private void initializeFieldsDescription() {
 		collarIdField.setPromptText("Collar ID");
 		petNameField.setPromptText("Name of Pet");
 		typeAnimalField.setPromptText("Type of Animal");
 		descriptionArea.setPromptText("Put some description of animal who you want to register");
 
 	}
-	public void clearFields(TextField id,TextField pName,TextField tAnimal,TextArea desc,ImageView imageView) {
+
+	public void clearFields(TextField id, TextField pName, TextField tAnimal, TextArea desc, ImageView imageView) {
 		id.clear();
 		pName.clear();
 		tAnimal.clear();
@@ -112,40 +116,42 @@ public class LeftPaneController implements Initializable {
 		imageView.setImage(null);
 	}
 
-	// to jest baaardzo złe - przemyśl to jeszcze raz ;) Nie dość że nie będzie działać poprawnie to jeszcze zapis woła o pomstę do nieba
-	public boolean checkIfEmpty(TextField id,TextField pName,TextField tAnimal,TextArea desc) {
-		if (id.getText().isEmpty()) {
-			id.getStyleClass().add("error");
-			pName.getStyleClass().remove("error");
-			tAnimal.getStyleClass().remove("error");
+	// sprawdź to czy teraz jest ok??
+	public boolean checkIfEmpty(TextField id, TextField pName, TextField tAnimal, TextArea desc) {
+		if (id.getText().trim().equals("")) {
+			showRedBorder(id, pName, tAnimal);
 			return false;
 
-		} else if (pName.getText().isEmpty()) {
-			id.getStyleClass().remove("error");
-			pName.getStyleClass().add("error");
-			tAnimal.getStyleClass().remove("error");
+		} else if (pName.getText().trim().equals("")) {
+			showRedBorder(pName, id, tAnimal);
 			return false;
-		} else if (tAnimal.getText().isEmpty()) {
-			id.getStyleClass().remove("error");
-			pName.getStyleClass().remove("error");
-			tAnimal.getStyleClass().add("error");
+		} else if (tAnimal.getText().trim().equals("")) {
+			showRedBorder(tAnimal, id, pName);
 			return false;
-		} else if (desc.getText().isEmpty()) {
+		} else if (desc.getText().trim().equals("")) {
 			return false;
-		} else{
-			id.getStyleClass().remove("error");
-			pName.getStyleClass().remove("error");
-			tAnimal.getStyleClass().remove("error");
+		} else {
+			checkIfEmptyOk(id, pName, tAnimal);
 			return true;
 		}
 
-
 	}
-	private void chooseImage(){
-		FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)",
-				"*.JPG");
-		FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)",
-				"*.PNG");
+
+	private void showRedBorder(TextField whatIsNull, TextField firstField, TextField secondField) {
+		whatIsNull.getStyleClass().add("error");
+		firstField.getStyleClass().remove("error");
+		secondField.getStyleClass().remove("error");
+	}
+
+	private void checkIfEmptyOk(TextField firstField, TextField secondField, TextField thirdField) {
+		firstField.getStyleClass().remove("error");
+		secondField.getStyleClass().remove("error");
+		thirdField.getStyleClass().remove("error");
+	}
+
+	private void chooseImage() {
+		FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
+		FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
 		fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
 		File file = fileChooser.showOpenDialog(new Stage());
 		if (file != null) {
@@ -154,14 +160,14 @@ public class LeftPaneController implements Initializable {
 	}
 
 	private void openFile(File file) {
-		 try {
-             BufferedImage bufferedImage = ImageIO.read(file);
-             Image image = SwingFXUtils.toFXImage(bufferedImage, null);
-             petPicture.setImage(image);
-         } catch (IOException ex) {
-         	//Loggery robimy jako pola statyczne dla klasy!
-             Logger.getLogger(LeftPaneController.class.getName()).log(Level.SEVERE, null, ex);
-         }
+		try {
+			BufferedImage bufferedImage = ImageIO.read(file);
+			Image image = SwingFXUtils.toFXImage(bufferedImage, null);
+			petPicture.setImage(image);
+		} catch (IOException ex) {
+			// Loggery robimy jako pola statyczne dla klasy!
+			Logger.getLogger(LeftPaneController.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 }

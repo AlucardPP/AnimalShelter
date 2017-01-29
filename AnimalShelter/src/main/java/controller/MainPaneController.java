@@ -1,14 +1,11 @@
 package controller;
 
-
 import java.net.URL;
 
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -22,6 +19,7 @@ import javafx.scene.image.ImageView;
 import utils.Animals;
 
 public class MainPaneController implements Initializable {
+	private final int MAX_TABLE_ROW = 2;
 
 	private final ObservableList<Animals> data = FXCollections.observableArrayList();
 
@@ -37,17 +35,17 @@ public class MainPaneController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		TableView<Animals> tableOfAnimals = bottomPaneController.getTableView();
 		Button viewSelectedRow = bottomPaneController.getViewButton();
-		leftfPaneInitialize(tableOfAnimals, viewSelectedRow);
+		Button addButton = leftPaneController.getAddButton();
+		leftfPaneInitialize(tableOfAnimals, viewSelectedRow, addButton);
 		initializeBottomPane();
-
 
 	}
 
 	public void addToTable(TextField id, TextField petName, TextField typeAnimal, TextArea desc, ImageView imageView,
 			TableView<Animals> table) {
-		String collId = id.getText();
-		String nameOfPet = petName.getText();
-		String type = typeAnimal.getText();
+		String collId = id.getText().trim();
+		String nameOfPet = petName.getText().trim();
+		String type = typeAnimal.getText().trim();
 		String description = desc.getText();
 		Image animalImg = imageView.getImage();
 		createData(collId, nameOfPet, type, description, setImage(animalImg), table);
@@ -82,63 +80,61 @@ public class MainPaneController implements Initializable {
 
 	}
 
-	private void leftfPaneInitialize(TableView table, Button button) {
+	private void leftfPaneInitialize(TableView table, Button viewSelectedRow, Button addButton) {
 		TextField collarId = leftPaneController.getCollarIdField();
 		TextField petName = leftPaneController.getPetNameField();
 		TextField typeOfAnimal = leftPaneController.getTypeAnimalField();
 		TextArea description = leftPaneController.getDescriptionArea();
-		Button addButton = leftPaneController.getAddButton();
 		ImageView animalImage = leftPaneController.getPetPicture();
 		addDataToTable(addButton, collarId, petName, typeOfAnimal, description, animalImage, table);
-		showDataFromTable(button, collarId, petName, typeOfAnimal, description, animalImage, table);
+		showDataFromTable(viewSelectedRow, collarId, petName, typeOfAnimal, description, animalImage, table);
 
 	}
 
 	private void addDataToTable(Button addButton, TextField collarId, TextField petName, TextField typeOfAnimal,
 			TextArea description, ImageView animalImage, TableView table) {
-		addButton.setOnAction(new EventHandler<ActionEvent>() {
+		addButton.setOnAction(event -> {
 
-			@Override
-			public void handle(ActionEvent event) {
-				if (leftPaneController.checkIfEmpty(collarId, petName, typeOfAnimal, description) == false) {
-					// add some window with information about error
-				} else {
+			if (leftPaneController.checkIfEmpty(collarId, petName, typeOfAnimal, description) == false) {
+				// add some window with information about error
+			} else if (bottomPaneController.checkSizeOfTable(MAX_TABLE_ROW) == false) {
+				// show window who tells you that you reach max limit of animals
+				// in shelter
+				// temporary I only clear all fields
+				leftPaneController.clearFields(collarId, petName, typeOfAnimal, description, animalImage);
 
-					addToTable(collarId, petName, typeOfAnimal, description, animalImage, table);
-					leftPaneController.clearFields(collarId, petName, typeOfAnimal, description, animalImage);
-
-				}
-				event.consume();
+			} else {
+				addToTable(collarId, petName, typeOfAnimal, description, animalImage, table);
+				leftPaneController.clearFields(collarId, petName, typeOfAnimal, description, animalImage);
 
 			}
+			event.consume();
+
 		});
 	}
 
 	private void showDataFromTable(Button button, TextField collarId, TextField petName, TextField typeOfAnimal,
 			TextArea description, ImageView animalImage, TableView table) {
-		button.setOnAction(new EventHandler<ActionEvent>() {
+		button.setOnAction(event -> {
 
-			@Override
-			public void handle(ActionEvent event) {
-				leftPaneController.clearFields(collarId, petName, typeOfAnimal, description, animalImage);
-				viewTableRow(table, collarId, petName, typeOfAnimal, description, animalImage);
-
-			}
+			leftPaneController.clearFields(collarId, petName, typeOfAnimal, description, animalImage);
+			viewTableRow(table, collarId, petName, typeOfAnimal, description, animalImage);
+			event.consume();
 
 		});
 	}
 
 	private void initializeBottomPane() {
 		TableColumn<Animals, String> collarIdColumn = bottomPaneController.getCollarIdColumn();
-		collarIdColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("collarId"));
+		collarIdColumn.setCellValueFactory(new PropertyValueFactory("collarId"));
 		TableColumn<Animals, String> petNameColumn = bottomPaneController.getPetNameColumn();
-		petNameColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("name"));
+		petNameColumn.setCellValueFactory(new PropertyValueFactory("name"));
 		TableColumn<Animals, String> typeAnimalColumn = bottomPaneController.getTypeOfAnimalColumn();
-		typeAnimalColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("type"));
+		typeAnimalColumn.setCellValueFactory(new PropertyValueFactory("type"));
 		TableColumn<Animals, String> descriptionColumn = bottomPaneController.getDescriptionColumn();
-		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Animals, String>("description"));
+		descriptionColumn.setCellValueFactory(new PropertyValueFactory("description"));
 		TableColumn<Animals, ImageView> imageColumn = bottomPaneController.getImageColumn();
-		imageColumn.setCellValueFactory(new PropertyValueFactory<Animals, ImageView>("image"));
+		imageColumn.setCellValueFactory(new PropertyValueFactory("image"));
 	}
 
 }
